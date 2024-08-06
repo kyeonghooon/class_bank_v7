@@ -15,7 +15,13 @@ spring:
     driver-class-name: org.h2.Driver #드라이버 클래스를 설정 합니다.
     username: sa #사용자 ID를 지정
     password: '' #DB 비밀번호 여기서는 빈 문자열로 설정
-    
+  sql:
+    init:
+      schema-locations:
+      - classpath:db/table.sql
+      data-locations:
+      - classpath:db/data.sql
+  
   h2:
     console:
       enabled: true #H2 데이터 베이스 콘솔을 활성화 합니다.
@@ -27,7 +33,7 @@ spring:
 #mybatis 설정
 mybatis:
   mapper-locations:
-    - classpath:mapper/**/*.yml #MyBatis 매퍼 파일 위치를 설정합니다. **은 모든 디렉토리
+    - classpath:mapper/**/*.xml #MyBatis 매퍼 파일 위치를 설정합니다. **은 모든 디렉토리
   configuration:
     map-underscore-to-camel-case: true #데이터베이스의 언더스코어 네이밍(column_name)
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #SQL 로깅 구현체를 설정합니다.
