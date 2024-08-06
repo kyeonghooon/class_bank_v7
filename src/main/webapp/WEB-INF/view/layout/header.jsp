@@ -40,7 +40,7 @@
 						<h2>About Me</h2>
 						<h5>Photo of me:</h5>
 						<div class="m--profile">Fake Image</div>
-						<p>Some text about me in culpa qui officia deserunt mollit anim..</p>
+						<p>코린이 개발을 위한 뱅크 앱</p>
 						<h3>Some Links</h3>
 						<p>Lorem ipsum dolor sit ame.</p>
 						<ul class="nav nav-pills flex-column">

@@ -13,7 +13,6 @@ java {
 		languageVersion = JavaLanguageVersion.of(21)
 	}
 }
-
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
