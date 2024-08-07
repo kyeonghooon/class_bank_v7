@@ -1,6 +1,7 @@
 package com.tenco.bank.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,10 +30,9 @@ public class UserService {
 		int result = 0;
 		try {
 			result = userRepository.insert(dto.toUser());
-		} catch (DataDeliveryException e) {
-			throw new DataDeliveryException("잘못된 처리입니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+		} catch (DataAccessException e) {
+			throw new DataDeliveryException("중복된 이름을 사용할 수 없습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new RedirectException("알 수 없는 오류", HttpStatus.SERVICE_UNAVAILABLE);
 		}
 		if (result != 1) {
