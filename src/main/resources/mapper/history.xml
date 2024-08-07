@@ -10,7 +10,7 @@
 		values(#{amount},#{wBalance},#{dBalance},#{wAccountId},#{dAccountId})
 	</insert>
 	<update id="updateById">
-		update history_tb set 
+		update history_tb set
 		amount = #{amount},
 		w_balance = #{wBalance},
 		d_balance = #{dBalance},
