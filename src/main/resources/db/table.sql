@@ -13,8 +13,8 @@ create table account_tb(
     number varchar(30) not null unique,
     password varchar(30) not null,
     balance bigint not null comment '계좌잔액',
-    created_at timestamp not null default now(),
-    user_id int
+    user_id int,
+    created_at timestamp not null default now()
 );
 
 -- 거래내역 ID 값이 필요 (id)

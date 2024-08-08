@@ -65,7 +65,6 @@ public class UserController {
 		// 서비스 객체로 전달
 		userService.createUser(dto);
 		
-		// TODO - 추후 수정
 		return "redirect:/user/sign-in";
 	}
 	
