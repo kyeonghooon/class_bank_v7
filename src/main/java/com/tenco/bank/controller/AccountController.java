@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.tenco.bank.dto.DepositDTO;
 import com.tenco.bank.dto.SaveDTO;
+import com.tenco.bank.dto.TransferDTO;
 import com.tenco.bank.dto.WithdrawalDTO;
 import com.tenco.bank.handler.exception.DataDeliveryException;
 import com.tenco.bank.handler.exception.UnAuthorizedException;
@@ -104,6 +106,11 @@ public class AccountController {
 		return "account/withdrawal";
 	}
 
+	/**
+	 * 출금 기능 요청
+	 * @param dto
+	 * @return
+	 */
 	@PostMapping("/withdrawal")
 	public String withdrawalProc(WithdrawalDTO dto) {
 		User principal = (User) session.getAttribute(Define.PRINCIPAL);
@@ -126,5 +133,78 @@ public class AccountController {
 		accountService.updateAccountWithdraw(dto, principal.getId());
 		return "redirect:/account/list";
 	}
-
+	
+	/**
+	 * 입금 페이지 요청
+	 * 
+	 * @return deposit.jsp
+	 */
+	@GetMapping("/deposit")
+	public String depositPage() {
+		User principal = (User) session.getAttribute(Define.PRINCIPAL);
+		if (principal == null) {
+			throw new UnAuthorizedException(Define.NOT_AN_AUTHENTICATED_USER, HttpStatus.UNAUTHORIZED);
+		}
+		return "account/deposit";
+	}
+	
+	/**
+	 * 입금 기능 요청
+	 * @return
+	 */
+	@PostMapping("/deposit")
+	public String depositProc(DepositDTO dto) {
+		User principal = (User) session.getAttribute(Define.PRINCIPAL);
+		if (principal == null) {
+			throw new UnAuthorizedException(Define.NOT_AN_AUTHENTICATED_USER, HttpStatus.UNAUTHORIZED);
+		}
+		if (dto.getAmount() == null) {
+			throw new DataDeliveryException(Define.ENTER_YOUR_BALANCE, HttpStatus.BAD_REQUEST);
+		}
+		if (dto.getAmount().longValue() <= 0) {
+			throw new DataDeliveryException(Define.D_BALANCE_VALUE, HttpStatus.BAD_REQUEST);
+		}
+		if (dto.getDAccountNumber() == null || dto.getDAccountNumber().trim().isEmpty()) {
+			throw new DataDeliveryException(Define.ENTER_YOUR_ACCOUNT_NUMBER, HttpStatus.BAD_REQUEST);
+		}
+		accountService.updateAccountDeposit(dto, principal.getId());
+		return "redirect:/account/list";
+	}
+	
+	// 이체 페이지 요청
+	@GetMapping("/transfer")
+	public String transferPage() {
+		User principal = (User) session.getAttribute(Define.PRINCIPAL);
+		if (principal == null) {
+			throw new UnAuthorizedException(Define.NOT_AN_AUTHENTICATED_USER, HttpStatus.UNAUTHORIZED);
+		}
+		return "account/transfer";
+	}
+	
+	// 이체 기능 처리 요청
+	@PostMapping("/transfer")
+	public String transferProc(TransferDTO dto) {
+		User principal = (User) session.getAttribute(Define.PRINCIPAL);
+		if (principal == null) {
+			throw new UnAuthorizedException(Define.NOT_AN_AUTHENTICATED_USER, HttpStatus.UNAUTHORIZED);
+		}
+		// 유효성 검사 (자바 코드를 개발) --> 스프링 부트 @Valid 라이브러리가 존재
+		if (dto.getAmount() == null) {
+			throw new DataDeliveryException(Define.ENTER_YOUR_BALANCE, HttpStatus.BAD_REQUEST);
+		}
+		if (dto.getAmount().longValue() <= 0) {
+			throw new DataDeliveryException(Define.W_BALANCE_VALUE, HttpStatus.BAD_REQUEST);
+		}
+		if (dto.getWAccountNumber() == null || dto.getWAccountNumber().trim().isEmpty()) {
+			throw new DataDeliveryException(Define.ENTER_YOUR_ACCOUNT_NUMBER, HttpStatus.BAD_REQUEST);
+		}
+		if (dto.getPassword() == null || dto.getPassword().trim().isEmpty()) {
+			throw new DataDeliveryException(Define.ENTER_YOUR_PASSWORD, HttpStatus.BAD_REQUEST);
+		}
+		if (dto.getDAccountNumber() == null || dto.getDAccountNumber().trim().isEmpty()) {
+			throw new DataDeliveryException(Define.ENTER_YOUR_ACCOUNT_NUMBER, HttpStatus.BAD_REQUEST);
+		}
+		accountService.updateAccountTransfer(dto, principal.getId());
+		return "redirect:/account/list";
+	}
 }
