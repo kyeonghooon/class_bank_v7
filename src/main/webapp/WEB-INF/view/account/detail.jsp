@@ -9,7 +9,7 @@
 
 	<div class="bg-light p-md-5">
 		<div class="user--box">
-			${principal.username}님 계좌<br> 계좌번호 : ${account.number}<br> 잔액 : ${account.balance} 원
+			${principal.username}님 계좌<br> 계좌번호 : ${account.number}<br> 잔액 : ${account.formatKoreanWon(account.balance)}
 		</div>
 		<br>
 		<div>
@@ -29,13 +29,13 @@
 				</tr>
 			</thead>
 			<tbody>
-			<c:forEach items="${historyList}" var="history">
+			<c:forEach items="${historyList}" var="historyAccount">
 				<tr>
-					<td>${history.createdAt}</td>
-					<td>${history.sender}</td>
-					<td>${history.receiver}</td>
-					<td>${history.amount}</td>
-					<td>${history.balance}</td>
+					<td>${historyAccount.timestampToString(historyAccount.createdAt)}</td>
+					<td>${historyAccount.sender}</td>
+					<td>${historyAccount.receiver}</td>
+					<td>${historyAccount.formatKoreanWon(historyAccount.amount)}</td>
+					<td>${historyAccount.formatKoreanWon(historyAccount.balance)}</td>
 				</tr>
 			</c:forEach>
 			</tbody>

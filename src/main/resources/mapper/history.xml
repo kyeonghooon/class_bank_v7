@@ -47,6 +47,7 @@
 			LEFT JOIN account_tb wa ON h.w_account_id = wa.id
 			WHERE h.d_account_id = #{accountId}
 			OR h.w_account_id = #{accountId}
+			ORDER BY h.created_at DESC
 		</if>
 		<if test="type == 'deposit'">
 			SELECT h.id, h.amount, h.d_balance AS balance,
@@ -58,6 +59,7 @@
 			account_tb da ON h.d_account_id = da.id
 			LEFT JOIN account_tb wa ON h.w_account_id = wa.id
 			WHERE h.d_account_id = #{accountId}
+			ORDER BY h.created_at DESC
 		</if>
 		<if test="type == 'withdrawal'">
 			SELECT h.id, h.amount, h.w_balance AS balance,
@@ -69,6 +71,7 @@
 			account_tb da ON h.d_account_id = da.id
 			LEFT JOIN account_tb wa ON h.w_account_id = wa.id
 			WHERE h.w_account_id = #{accountId}
+			ORDER BY h.created_at DESC
 		</if>
 	</select>
 </mapper>
