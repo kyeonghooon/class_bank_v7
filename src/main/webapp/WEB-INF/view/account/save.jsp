@@ -7,7 +7,6 @@
 	<h2>로그인</h2>
 	<h5>Bank App에 오신걸 환영합니다.</h5>
 
-	<!-- 예외적으로 로그인은 보안때문에 post로 던지자 -->
 	<form action="/account/save" method="post">
 		<div class="form-group">
 			<label for="number">number:</label> <input type="text" class="form-control" placeholder="Enter number" id="number" name="number" value="1002-1234">

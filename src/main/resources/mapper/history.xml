@@ -30,4 +30,45 @@
 	<select id="findAll" resultType="com.tenco.bank.repository.model.History">
 		select * from history_tb
 	</select>
+
+	<select id="findByAccountIdAndTypeOfHistory" resultType="com.tenco.bank.repository.model.HistoryAccount">
+		<if test="type == 'all'">
+			SELECT h.id, h.amount,
+			CASE
+			WHEN h.d_account_id = #{accountId} THEN h.d_balance
+			WHEN h.w_account_id = #{accountId} THEN h.w_balance
+			END AS balance,
+			COALESCE(CAST(wa.number AS CHAR(10)), 'ATM') AS sender,
+			COALESCE(CAST(da.number AS CHAR(10)), 'ATM') AS receiver,
+			h.created_at
+			FROM history_tb h
+			LEFT JOIN account_tb da ON
+			h.d_account_id = da.id
+			LEFT JOIN account_tb wa ON h.w_account_id = wa.id
+			WHERE h.d_account_id = #{accountId}
+			OR h.w_account_id = #{accountId}
+		</if>
+		<if test="type == 'deposit'">
+			SELECT h.id, h.amount, h.d_balance AS balance,
+			COALESCE(CAST(wa.number AS CHAR(10)), 'ATM') AS sender,
+			da.number AS receiver,
+			h.created_at
+			FROM history_tb AS h
+			LEFT JOIN
+			account_tb da ON h.d_account_id = da.id
+			LEFT JOIN account_tb wa ON h.w_account_id = wa.id
+			WHERE h.d_account_id = #{accountId}
+		</if>
+		<if test="type == 'withdrawal'">
+			SELECT h.id, h.amount, h.w_balance AS balance,
+			wa.number AS sender,
+			COALESCE(CAST(da.number AS CHAR(10)), 'ATM') AS receiver,
+			h.created_at
+			FROM history_tb AS h
+			LEFT JOIN
+			account_tb da ON h.d_account_id = da.id
+			LEFT JOIN account_tb wa ON h.w_account_id = wa.id
+			WHERE h.w_account_id = #{accountId}
+		</if>
+	</select>
 </mapper>

@@ -20,17 +20,19 @@
 				<tbody>
 					<c:forEach var="account" items="${accountList}">
 						<tr>
-							<td>${account.number}</td>
+							<td><a href="/account/detail/${account.id}?type=all">${account.number}</a></td>
 							<td>${account.balance}</td>
 						</tr>
 					</c:forEach>
 				</tbody>
 			</table>
 		</c:when>
-		<c:otherwise></c:otherwise>
+		<c:otherwise>
+			<div class="jumbotron display-4">
+				<h5>아직 생성된 계좌가 없습니다.</h5>
+			</div>
+		</c:otherwise>
 	</c:choose>
-	<!-- 계좌가 없는 경우 있는 경우를 분리 -->
-	<!-- 계좌가 있는 사용자 일 경우 반복문을 활용할 예정 -->
 
 </div>
 <!-- end of col-sm-8 -->
