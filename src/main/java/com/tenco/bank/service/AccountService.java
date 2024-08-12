@@ -197,9 +197,15 @@ public class AccountService {
 	 * @return 전체, 입금, 출금 거래내역(3가지 타입) 반환
 	 */
 	// @Transactional
-	public List<HistoryAccount> readHistoryByAccountId(String type, Integer accountId){
+	public List<HistoryAccount> readHistoryByAccountId(String type, Integer accountId, Integer offset, Integer limit){
 		List<HistoryAccount> list = null;
-		list = historyRepository.findByAccountIdAndTypeOfHistory(type, accountId);
+		list = historyRepository.findByAccountIdAndTypeOfHistory(type, accountId, offset, limit);
 		return list;
+	}
+	
+	public int countHistoryByAccountIdAndType(String type, Integer accountId) {
+		int result = 0;
+		result = historyRepository.countHistoryByAccountIdAndType(type, accountId);
+		return result;
 	}
 }

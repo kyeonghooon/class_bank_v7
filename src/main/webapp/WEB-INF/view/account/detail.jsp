@@ -13,9 +13,8 @@
 		</div>
 		<br>
 		<div>
-			<a href="/account/detail/1?type=all" class="btn btn-outline-primary">전체</a>
-			<a href="/account/detail/1?type=deposit" class="btn btn-outline-primary">입금</a>
-			<a href="/account/detail/1?type=withdrawal" class="btn btn-outline-primary">출금</a>
+			<a href="?type=all" class="btn btn-outline-primary">전체</a> <a href="?type=deposit" class="btn btn-outline-primary">입금</a> <a href="?type=withdrawal"
+				class="btn btn-outline-primary">출금</a>
 		</div>
 		<br>
 		<table class="table table-striped">
@@ -29,17 +28,29 @@
 				</tr>
 			</thead>
 			<tbody>
-			<c:forEach items="${historyList}" var="historyAccount">
-				<tr>
-					<td>${historyAccount.timestampToString(historyAccount.createdAt)}</td>
-					<td>${historyAccount.sender}</td>
-					<td>${historyAccount.receiver}</td>
-					<td>${historyAccount.formatKoreanWon(historyAccount.amount)}</td>
-					<td>${historyAccount.formatKoreanWon(historyAccount.balance)}</td>
-				</tr>
-			</c:forEach>
+				<c:forEach items="${historyList}" var="historyAccount">
+					<tr>
+						<td>${historyAccount.timestampToString(historyAccount.createdAt)}</td>
+						<td>${historyAccount.sender}</td>
+						<td>${historyAccount.receiver}</td>
+						<td>${historyAccount.formatKoreanWon(historyAccount.amount)}</td>
+						<td>${historyAccount.formatKoreanWon(historyAccount.balance)}</td>
+					</tr>
+				</c:forEach>
 			</tbody>
 		</table>
+		<br>
+		<div class="d-flex justify-content-center">
+			<ul class="pagination">
+				<li class="page-item ${currentPage == 1 ? 'disabled' : ''}"><a class="page-link" href="?type=${type}&page=1">First</a></li>
+				<li class="page-item ${currentPage == 1 ? 'disabled' : ''}"><a class="page-link" href="?type=${type}&page=${currentPage - 1}">Previous</a></li>
+				<c:forEach begin="${startPage}" end="${endPage}" var="page">
+					<li class="page-item ${page == currentPage ? 'active' : ''}"><a class="page-link" href="?type=${type}&page=${page}">${page}</a></li>
+				</c:forEach>
+				<li class="page-item ${currentPage == totalPage ? 'disabled' : ''}"><a class="page-link" href="?type=${type}&page=${currentPage + 1}">Next</a></li>
+				<li class="page-item ${currentPage == totalPage ? 'disabled' : ''}"><a class="page-link" href="?type=${type}&page=${totalPage}">End</a></li>
+			</ul>
+		</div>
 	</div>
 
 </div>

@@ -112,6 +112,7 @@ public class AccountController {
 
 	/**
 	 * 출금 기능 요청
+	 * 
 	 * @param dto
 	 * @return
 	 */
@@ -137,7 +138,7 @@ public class AccountController {
 		accountService.updateAccountWithdraw(dto, principal.getId());
 		return "redirect:/account/list";
 	}
-	
+
 	/**
 	 * 입금 페이지 요청
 	 * 
@@ -151,9 +152,10 @@ public class AccountController {
 		}
 		return "account/deposit";
 	}
-	
+
 	/**
 	 * 입금 기능 요청
+	 * 
 	 * @return
 	 */
 	@PostMapping("/deposit")
@@ -174,7 +176,7 @@ public class AccountController {
 		accountService.updateAccountDeposit(dto, principal.getId());
 		return "redirect:/account/list";
 	}
-	
+
 	// 이체 페이지 요청
 	@GetMapping("/transfer")
 	public String transferPage() {
@@ -184,7 +186,7 @@ public class AccountController {
 		}
 		return "account/transfer";
 	}
-	
+
 	// 이체 기능 처리 요청
 	@PostMapping("/transfer")
 	public String transferProc(TransferDTO dto) {
@@ -211,25 +213,41 @@ public class AccountController {
 		accountService.updateAccountTransfer(dto, principal.getId());
 		return "redirect:/account/list";
 	}
-	
+
 	/**
-	 * 계좌 상세 보기 페이지
-	 * 주소 설계 : localhost:8080/account/detail/1?type=all, deposit, withdrawal
+	 * 계좌 상세 보기 페이지 주소 설계 : localhost:8080/account/detail/1?type=all, deposit, withdrawal
+	 * 
 	 * @return
 	 */
 	@GetMapping("/detail/{accountId}")
-	public String detail(@PathVariable(name = "accountId") Integer accountId, @RequestParam(required = false, name = "type") String type, Model model) {
+	public String detail(@PathVariable(name = "accountId") Integer accountId, //
+			@RequestParam(required = false, name = "type") String type,
+			@RequestParam(defaultValue = "1", name = "page") int page,
+			Model model) {
 		User principal = (User) session.getAttribute(Define.PRINCIPAL);
 		if (principal == null) {
 			throw new UnAuthorizedException(Define.NOT_AN_AUTHENTICATED_USER, HttpStatus.UNAUTHORIZED);
 		}
 		// 유효성 검사
-		List<String> validTypes = Arrays.asList("all","deposit","withdrawal");
-		if(!validTypes.contains(type)) {
+		List<String> validTypes = Arrays.asList("all", "deposit", "withdrawal");
+		if (!validTypes.contains(type)) {
 			throw new DataDeliveryException("유효하지 않은 접근 입니다.", HttpStatus.BAD_REQUEST);
 		}
 		Account account = accountService.readAccountById(accountId);
-		List<HistoryAccount> historyList = accountService.readHistoryByAccountId(type, accountId);
+		int pageSize = 2; // 한페이지에 2개
+		int offset = (page - 1) * pageSize;
+		int totalHistories = accountService.countHistoryByAccountIdAndType(type, accountId);
+		int totalPage = (int) Math.ceil((double) totalHistories / pageSize);
+		int pageBlock = 5;
+		int tenCount = (int) Math.ceil(((double) page / pageBlock) - 1) * pageBlock;
+		int startPage = tenCount + 1;
+		int endPage = (tenCount + 5) > totalPage ? totalPage : (tenCount + pageBlock);
+		List<HistoryAccount> historyList = accountService.readHistoryByAccountId(type, accountId, offset, pageSize);
+		model.addAttribute("type", type);
+		model.addAttribute("currentPage", page);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
+		model.addAttribute("totalPage", totalPage);
 		model.addAttribute("account", account);
 		model.addAttribute("historyList", historyList);
 		return "account/detail";
