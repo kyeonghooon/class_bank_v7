@@ -2,6 +2,7 @@ package com.tenco.bank.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,17 +21,16 @@ import com.tenco.bank.repository.model.History;
 import com.tenco.bank.repository.model.HistoryAccount;
 import com.tenco.bank.utils.Define;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class AccountService {
 
+	@Autowired
 	private final AccountRepository accountRepository;
+	@Autowired
 	private final HistoryRepository historyRepository;
-
-	// @Autowired
-	public AccountService(AccountRepository accountRepository, HistoryRepository historyRepository) {
-		this.accountRepository = accountRepository;
-		this.historyRepository = historyRepository;
-	}
 
 	@Transactional
 	public void createAccount(SaveDTO dto, int principalId) {
@@ -176,9 +176,10 @@ public class AccountService {
 			throw new DataDeliveryException(Define.FAILED_PROCESSING, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	/**
 	 * 단일 계좌 조회 기능
+	 * 
 	 * @param accountId (pk)
 	 * @return
 	 */
@@ -189,20 +190,21 @@ public class AccountService {
 		}
 		return accountEntity;
 	}
-	
+
 	/**
 	 * 단일 계좌 거래 내역 조회
+	 * 
 	 * @param type = [all, deposit, withdrawal]
 	 * @param accountId (pk)
 	 * @return 전체, 입금, 출금 거래내역(3가지 타입) 반환
 	 */
 	// @Transactional
-	public List<HistoryAccount> readHistoryByAccountId(String type, Integer accountId, Integer offset, Integer limit){
+	public List<HistoryAccount> readHistoryByAccountId(String type, Integer accountId, Integer offset, Integer limit) {
 		List<HistoryAccount> list = null;
 		list = historyRepository.findByAccountIdAndTypeOfHistory(type, accountId, offset, limit);
 		return list;
 	}
-	
+
 	public int countHistoryByAccountIdAndType(String type, Integer accountId) {
 		int result = 0;
 		result = historyRepository.countHistoryByAccountIdAndType(type, accountId);

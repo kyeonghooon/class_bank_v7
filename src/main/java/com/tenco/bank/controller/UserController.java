@@ -1,5 +1,6 @@
 package com.tenco.bank.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,19 +15,18 @@ import com.tenco.bank.service.UserService;
 import com.tenco.bank.utils.Define;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
-
-	private UserService userService;
+	
+	@Autowired
+	private final UserService userService;
+	@Autowired
 	private final HttpSession session;
 	
-	// @Autowired 
-	public UserController(UserService userService, HttpSession session) {
-		this.userService = userService;
-		this.session = session;
-	}
 	
 	/**
 	 * 회원 가입 페이지 요청
