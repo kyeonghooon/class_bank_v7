@@ -21,7 +21,7 @@
 	<select
 		id="findByUserId"
 		resultType="com.tenco.bank.repository.model.Account">
-		select * from account_tb where id = #{userId}
+		select * from account_tb where user_id = #{userId}
 	</select>
 
 	<select

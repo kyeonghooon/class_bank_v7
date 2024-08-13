@@ -27,7 +27,8 @@ public class Define {
 	public static final String ENTER_YOUR_BALANCE = "금액을 입력해 주세요.";
 	public static final String D_BALANCE_VALUE ="입금 금액이 0원 이하 일 수 없습니다.";
 	public static final String W_BALANCE_VALUE ="출금 금액이 0원 이하 일 수 없습니다.";
-	public static final String FAIL_USER_LOGIN = "아이디 혹은 비밀번호가 틀렸습니다.";
+	public static final String FAIL_USER_LOGIN = "존재하지 않는 아이디 입니다.";
+	public static final String FAIL_USER_LOGIN_PASSWORD = "비밀번호가 잘못되었습니다.";
 	
 	// etc 
 	public static final String FAIL_TO_CREATE_USER = "회원가입 실패.";
