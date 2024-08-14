@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +28,10 @@ public class UserService {
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	
+	@Value("${file.upload-dir}")
+	private String uploadDir;
+	
 	/**
 	 * 회원 등록 서비스 기능 트랜잭션 처리
 	 * 
@@ -92,8 +97,11 @@ public class UserService {
 			throw new DataDeliveryException("파일 크기는 20MB 이상 클 수 없습니다.", HttpStatus.BAD_REQUEST);
 		}
 		
-		// 서버 컴퓨터에 파일을 넣을 디렉토리가 있는지 검사
-		String saveDerectory = Define.UPLOAD_FILE_DERECTORY;
+		// 코드 수정
+		// File - getAbsolutePath() : 파일 시스템의 절대 경로를 나타냅니다.
+		// (리눅스 또는 MacOS)에 맞춰서 절대 경로를 생성 시킬 수 있다.
+		String saveDerectory = new File(uploadDir).getAbsolutePath();
+		System.out.println("saveDerectory : " + saveDerectory);
 		File directory = new File(saveDerectory);
 		if (!directory.exists()) {
 			directory.mkdirs();
