@@ -4,9 +4,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tenco.bank.repository.model.User;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class SignUpDTO {
 
 	private String username;

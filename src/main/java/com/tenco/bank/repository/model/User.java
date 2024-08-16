@@ -24,6 +24,9 @@ public class User {
 	private Timestamp createdAt;
 	
 	public String setUpUserImage() {
+		if (fullname.startsWith("OAuth_")) {
+			return originFileName;
+		}
 		return uploadFileName == null ? "http://picsum.photos/id/1/350" : "/images/uploads/" + uploadFileName;
 	}
 	
